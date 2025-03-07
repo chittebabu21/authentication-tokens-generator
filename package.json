@@ -1,5 +1,5 @@
 {
-  "name": "oauth_package",
+  "name": "authentication-tokens-generator",
   "version": "1.0.0",
   "main": "dist/index.js",
   "scripts": {
