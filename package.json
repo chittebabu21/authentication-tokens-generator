@@ -5,7 +5,9 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "concurrently \"tsc --watch\" \"nodemon ./dist/index.js\"",
-    "test": "jest"
+    "test": "jest",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test"
   },
   "keywords": [
     "oauth",
