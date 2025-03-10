@@ -1,11 +1,10 @@
-interface ITokens {
-    accessToken: string;
-    refreshToken: string;
+export declare class OAuth2 {
+    publicKey: string;
+    privateKey: string;
+    constructor(publicKey: string, privateKey?: string);
+    generateAccessToken(payload: {}, options: {}): Promise<string>;
+    generateRefreshToken(payload: {}, options: {}): Promise<string>;
+    validateToken(token: string): Promise<boolean>;
+    getPayload<T>(token: string): Promise<T>;
+    parseToken(token: string): {} | null;
 }
-interface Options {
-    accessTokenOptions: {};
-    refreshTokenOptions: {};
-}
-export declare const generateTokens: (publicKey: string, payload: {}, options: Options, privateKey?: string) => Promise<ITokens>;
-export declare const getPayload: <T>(token: string) => Promise<T>;
-export {};

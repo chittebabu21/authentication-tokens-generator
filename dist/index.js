@@ -174,49 +174,24 @@ var OAuth2 = /** @class */ (function () {
             });
         });
     };
+    OAuth2.prototype.getPayload = function (token) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                try {
+                    return [2 /*return*/, JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString())];
+                }
+                catch (err) {
+                    throw new Error("Failed to get payload.");
+                }
+                return [2 /*return*/];
+            });
+        });
+    };
     OAuth2.prototype.parseToken = function (token) {
         return jwt__namespace.decode(token);
     };
     return OAuth2;
 }());
 
-var generateTokens = function (publicKey, payload, options, privateKey) { return __awaiter(void 0, void 0, void 0, function () {
-    var oAuth2, accessToken, refreshToken, tokens;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 3, , 4]);
-                oAuth2 = new OAuth2(publicKey, privateKey);
-                return [4 /*yield*/, oAuth2.generateAccessToken(payload, options.accessTokenOptions)];
-            case 1:
-                accessToken = _a.sent();
-                return [4 /*yield*/, oAuth2.generateRefreshToken(payload, options.refreshTokenOptions)];
-            case 2:
-                refreshToken = _a.sent();
-                tokens = {
-                    accessToken: accessToken,
-                    refreshToken: refreshToken
-                };
-                return [2 /*return*/, tokens];
-            case 3:
-                _a.sent();
-                throw new Error('Failed to generate tokens.');
-            case 4: return [2 /*return*/];
-        }
-    });
-}); };
-var getPayload = function (token) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        try {
-            return [2 /*return*/, JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString())];
-        }
-        catch (err) {
-            throw new Error('Failed to get payload.');
-        }
-        return [2 /*return*/];
-    });
-}); };
-
-exports.generateTokens = generateTokens;
-exports.getPayload = getPayload;
+exports.OAuth2 = OAuth2;
 //# sourceMappingURL=index.js.map

@@ -1,5 +1,5 @@
 {
-  "name": "authentication-tokens-generator",
+  "name": "refresh-token-authentication-flow",
   "version": "1.0.0",
   "main": "dist/index.js",
   "scripts": {
@@ -34,5 +34,17 @@
     "@types/jest": "^29.5.14",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node-forge": "^1.3.11"
-  }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chittebabu21/authentication-tokens-generator.git"
+  },
+  "types": "./dist/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/chittebabu21/authentication-tokens-generator/issues"
+  },
+  "homepage": "https://github.com/chittebabu21/authentication-tokens-generator#readme"
 }
