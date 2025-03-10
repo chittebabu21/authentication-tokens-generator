@@ -1,41 +1,81 @@
-import { OAuth2 } from "./scripts/OAuth2";
+import * as jwt from 'jsonwebtoken';
 
-interface ITokens {
-    accessToken: string;
-    refreshToken: string;
-}
+export class OAuth2 {
+    publicKey!: string;
+    privateKey!: string;
 
-interface Options {
-    accessTokenOptions: {};
-    refreshTokenOptions: {};
-}
+    constructor(publicKey: string, privateKey?: string) {
+        if (!privateKey) {
+            privateKey = publicKey;
+        } 
 
-export const generateTokens = async (
-    publicKey: string, 
-    payload: {},  
-    options: Options,
-    privateKey?: string, 
-): Promise<ITokens> => {
-    try {
-        const oAuth2 = new OAuth2(publicKey, privateKey);
-        const accessToken = await oAuth2.generateAccessToken(payload, options.accessTokenOptions);
-        const refreshToken = await oAuth2.generateRefreshToken(payload, options.refreshTokenOptions);
-
-        const tokens: ITokens = {
-            accessToken,
-            refreshToken
-        };
-
-        return tokens;
-    } catch (err) {
-        throw new Error('Failed to generate tokens.');
+        this.publicKey = publicKey;
+        this.privateKey = privateKey;
     }
-}
 
-export const getPayload = async <T>(token: string): Promise<T> => {
-    try {
-        return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-    } catch (err) {
-        throw new Error('Failed to get payload.');
+    async generateAccessToken(payload: {}, options: {}): Promise<string> {
+        try {
+            const token = await new Promise<string>((resolve, reject) => {
+                jwt.sign(payload, this.privateKey, options, (err, token) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(token as string);
+                    }
+                });
+            });
+
+            return token;
+        } catch (err) {
+            throw new Error("Failed to generate access token.");
+        }
+    }
+
+    async generateRefreshToken(payload: {}, options: {}): Promise<string> {
+        try {
+            const token = await new Promise<string>((resolve, reject) => {
+                jwt.sign(payload, this.privateKey, options, (err, token) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(token as string);
+                    }
+                });
+            });
+
+            return token;
+        } catch (err) {
+            throw new Error("Failed to generate refresh token.");
+        }
+    }
+
+    async validateToken(token: string): Promise<boolean> {
+        try {
+            const payload = await new Promise((resolve, reject) => {
+                jwt.verify(token, this.publicKey, (err, payload) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(payload);
+                    }
+                });
+            });
+
+            return payload ? true : false;
+        } catch (err) {
+            throw new Error('Failed to validate token.');
+        }
+    }
+
+    async getPayload<T>(token: string): Promise<T> {
+        try {
+            return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+        } catch (err) {
+            throw new Error("Failed to get payload.");
+        }
+    }
+
+    parseToken(token: string): {} | null {
+        return jwt.decode(token);
     }
 }

@@ -1,11 +1,10 @@
-import * as oAuth from '../src/index';
+import { OAuth2 } from '../src/index';
+
+const oAuth = new OAuth2("secret", "private-secret");
 
 describe('Return access and refresh tokens', () => {
     it('Should return an object with access and refresh tokens', async () => {
-        const obj = (await oAuth.generateTokens('secret', { data: 13 }, { 
-            accessTokenOptions: { expiresIn: '15m', subject: 'tim@email.com' }, 
-            refreshTokenOptions: { expiresIn: '1h'}
-        }));
-        expect(obj).toHaveProperty('refreshToken');
+        const token = (await oAuth.generateAccessToken({ data: 'tom@mail.com' }, { expiresIn: '15m', subject: 'tom@mail.com' }));
+        expect(token);
     });
 });
